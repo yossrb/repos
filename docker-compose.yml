@@ -1,0 +1,143 @@
+version: '3.1'
+services:
+  Mongo:
+    container_name: Mongo
+    image: "mongo:5-focal"
+    ports:
+      - "27017:27017"
+    hostname: Mongo
+
+  auth:
+    container_name: auth
+    image: "auth"
+    build: ./microserviceNode
+    ports:
+      - "3000:3000"
+    hostname: auth
+    depends_on:
+      - "Mongo"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+  discovery:
+    container_name: eureka_microservice_container
+    image: eureka_microservice
+    build: ./eurekadiscovery_microservice
+    ports:
+      - "8762:8761"
+
+
+
+  post:
+    container_name: post_container
+    image: "post"
+    build: ./post
+    ports:
+      - "8086:8085"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://post-mysql:3306/post?useSSL=false
+      - MYSQL_HOST=post-mysql
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=trotti_post
+
+    depends_on:
+      - post-mysql
+
+  post-mysql:
+    container_name: post-mysql-mysql_2
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=trotti_post
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+    ports:
+      - 3309:3306
+    volumes:
+      - post-microservice-mysql-vol:/my/own/datadir
+
+  balade_microservice:
+    container_name: balade_microservice_container
+    image: "balade_microservice"
+    build: ./balade_microservce
+    ports:
+      - "8081:8081"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://balade-mysql:3306/post?useSSL=false
+      - MYSQL_HOST=balade-mysql
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=trotti_balade
+
+    depends_on:
+      - balade-mysql
+
+  balade-mysql:
+    container_name: balade_microservice-mysql-mysql_2
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=trotti_balade
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+
+    ports:
+      - 3309:3306
+    volumes:
+      - balade_microservice-microservice-mysql-vol:/my/own/datadir
+
+
+  advertisement-mysql:
+    container_name: advertisement-mysql-mysql_2
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=trotti_advertisement
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+
+    ports:
+      - 3310:3306
+    volumes:
+      - advertisement-microservice-mysql-vol:/my/own/datadir
+
+  trottinette:
+    container_name: trottinette
+    image: "trottinette"
+    build: ./Trottinette
+    ports:
+      - "8084:8084"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://trottinette-mysql:3306/trottinette?useSSL=false
+      - MYSQL_HOST=trottinette-mysql
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=trottinette
+
+    depends_on:
+      - trottinette-mysql
+
+  trottinette-mysql:
+    container_name: docker-mysql_2
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=trotti_trottinette
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+    ports:
+      - 3307:3306
+    volumes:
+      - trottinette-microservice-mysql-vol:/my/own/datadir
+
+
+
+
+volumes:
+  post-microservice-mysql-vol:
+  balade_microservice-microservice-mysql-vol:
+  advertisement-microservice-mysql-vol:
+  trottinette-microservice-mysql-vol:

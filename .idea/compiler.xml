@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="post" />
+        <module name="Trottinette" />
+        <module name="balade_microservce" />
+        <module name="advertisement" />
+        <module name="gateway_microservice" />
+        <module name="eurekadiscovery_microservice" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="advertisement" target="1.8" />
+      <module name="balade_microservce" target="1.8" />
+      <module name="Candidate" target="11" />
+      <module name="eurekadiscovery_microservice" target="1.8" />
+      <module name="gateway_microservice" target="1.8" />
+      <module name="location-velo-microserive" target="1.8" />
+      <module name="post" target="1.8" />
+      <module name="Trottinette" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Candidate" options="-parameters" />
+      <module name="Trottinette" options="-parameters" />
+      <module name="advertisement" options="-parameters" />
+      <module name="balade_microservce" options="-parameters" />
+      <module name="eurekadiscovery_microservice" options="-parameters" />
+      <module name="gateway_microservice" options="-parameters" />
+      <module name="location-velo-microserive" options="-parameters" />
+      <module name="post" options="-parameters" />
+    </option>
+  </component>
+</project>
